@@ -11,7 +11,6 @@ from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 import distutils.spawn
-import os
 import shlex
 import shutil
 import subprocess
@@ -142,9 +141,6 @@ class Connection(ConnectionBase):
         rc, self._mount_point, stderr = self._podman("mount")
         if rc != 0:
             display.vvvv("Failed to mount container %s: %s" % (self._container_id, stderr.strip()))
-        elif not os.listdir(self._mount_point.strip()):
-            display.vvvv("Failed to mount container with CGroups2: empty dir %s" % self._mount_point.strip())
-            self._mount_point = None
         else:
             self._mount_point = self._mount_point.strip()
             display.vvvvv("MOUNTPOINT %s RC %s STDERR %r" % (self._mount_point, rc, stderr))
